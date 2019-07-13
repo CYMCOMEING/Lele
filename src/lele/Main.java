@@ -63,6 +63,7 @@ public class Main {
         if (txt_path != null){
             File file = new File(root);
             txt_path.setText(file.getAbsolutePath());
+            root = file.getAbsolutePath();
         }
     }
 
@@ -124,6 +125,7 @@ public class Main {
                     if (txt_path != null){
                         Utils.wiriteFile(file.getAbsolutePath(), config_path);
                         txt_path.setText(file.getAbsolutePath());
+                        root = file.getAbsolutePath();
                     }
                 }
             }
