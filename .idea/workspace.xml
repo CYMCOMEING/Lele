@@ -25,12 +25,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lele/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="127" column="54" selection-start-line="127" selection-start-column="54" selection-end-line="127" selection-end-column="54" />
+            <state relative-caret-position="171">
+              <caret line="143" column="42" selection-start-line="143" selection-start-column="42" selection-end-line="143" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9062#9063#0" expanded="true" />
-                <element signature="e#9099#9100#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lele/LeLe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
+            <state relative-caret-position="323">
+              <caret line="128" column="43" selection-start-line="128" selection-start-column="43" selection-end-line="128" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,8 +70,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>addLog</find>
-      <find>appendError</find>
       <find>config_path</find>
+      <find>appendError</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,8 +93,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="328" />
-    <option name="y" value="39" />
+    <option name="x" value="526" />
+    <option name="y" value="11" />
     <option name="width" value="1393" />
     <option name="height" value="979" />
   </component>
@@ -155,6 +153,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -176,7 +175,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="LeLe" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="lele.LeLe" />
+      <module name="Lele" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="lele.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="lele.Main" />
       <module name="Lele" />
@@ -190,6 +202,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.LeLe" />
       </list>
     </recent_temporary>
   </component>
@@ -206,16 +219,18 @@
       <workItem from="1562835646036" duration="7408000" />
       <workItem from="1562909614574" duration="16827000" />
       <workItem from="1563006211130" duration="1013000" />
+      <workItem from="1563080630827" duration="6467000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25248000" />
+    <option name="totallyTimeSpent" value="31715000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="328" y="39" width="1393" height="979" extended-state="0" />
+    <frame x="526" y="11" width="1393" height="979" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25731432" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26106527" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -224,7 +239,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32978722" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.33017752" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33017752" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -234,7 +249,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32978722" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3289941" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -334,13 +349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/javax/swing/JTextArea.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="472" column="16" selection-start-line="472" selection-start-column="16" selection-end-line="472" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Lele.iml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -351,18 +359,6 @@
           <caret line="79" column="22" lean-forward="true" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lele/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="127" column="54" selection-start-line="127" selection-start-column="54" selection-end-line="127" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9062#9063#0" expanded="true" />
-            <element signature="e#9099#9100#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -379,8 +375,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lele/LeLe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
+        <state relative-caret-position="323">
+          <caret line="128" column="43" selection-start-line="128" selection-start-column="43" selection-end-line="128" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/javax/swing/JTextArea.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="426" column="38" lean-forward="true" selection-start-line="426" selection-start-column="38" selection-end-line="426" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lele/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="143" column="42" selection-start-line="143" selection-start-column="42" selection-end-line="143" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

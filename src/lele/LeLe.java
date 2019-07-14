@@ -17,6 +17,11 @@ public class LeLe {
 
     private HttpGetConnect connect = new HttpGetConnect();
 
+    /**
+     * 获取"http://retoys.net/主页面的pickup4个连接
+     * 已经弃用
+     * @return
+     */
     public List<String> getPickUpUrl() {
         List<String> list = new ArrayList<String>();
 
@@ -27,13 +32,9 @@ public class LeLe {
                     Document doc = Jsoup.parse(html);
                     Elements eles = doc.getElementsByClass("columns--grid2 columns--grid2--right").get(0).children();
                     for (Element item : eles) {
-//                System.out.println(item.toString());
-//                System.out.println("-----------------------------------");
                         Element a = item.getElementsByTag("a").first();
-//                System.out.println(a.toString());
                         if (a != null) {
                             list.add(a.attr("href"));
-//                    System.out.println(a.attr("href"));
                         }
                     }
                 }
@@ -50,6 +51,42 @@ public class LeLe {
         return list;
     }
 
+    public List<String> getAllPickupUrl(){
+        String url = "http://retoys.net/pickup/";
+        List<String> list = new ArrayList<>();
+
+        try {
+            connect.connect(url, "utf-8", new HttpGetConnect.ICallBack() {
+                @Override
+                public void onSuccess(String html) {
+                    Document doc = Jsoup.parse(html);
+
+                    // 获取第一个row下的所有子项
+                    Elements rowClass = doc.getElementsByClass("row").first().children();
+                    for (Element row : rowClass){
+                        list.add(row.getElementsByTag("a").attr("href"));
+                    }
+                }
+
+                @Override
+                public void onFail(int retCode) {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return list;
+    }
+
+    /**
+     *  获取pickup作品下的图片链接
+     * @param url
+     * @return
+     */
     public List<String> getPictureUrls(String url) {
         List<String> list = new ArrayList<String>();
 
@@ -87,6 +124,9 @@ public class LeLe {
     public String formatString(String str){
         String ret = str.replace("/", "-");
         return ret.replace("\\", "-");
+    }
+
+    public static void main(String[] args){
     }
 
 }

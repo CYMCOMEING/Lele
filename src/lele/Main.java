@@ -1,6 +1,7 @@
 package lele;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +27,7 @@ public class Main {
         // Setting the width and height of frame
         mainFrame.setSize(400, 500);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // 禁止改变大小
-//        frame.setResizable(false);
+        mainFrame.setLocationRelativeTo(null);//在屏幕中居中显示
 
         /* 创建面板，这个类似于 HTML 的 div 标签
          * 我们可以创建多个面板并在 JFrame 中指定位置
@@ -141,7 +141,7 @@ public class Main {
         // 用于输出信息文本框
         txt_log = new JTextArea();
         txt_log.setEditable(false);
-        txt_log.setForeground(Color.BLACK);
+        txt_log.setForeground(Color.BLUE);
         // 给文本框添加滚动条
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(txt_log);
@@ -213,14 +213,14 @@ public class Main {
         int errCounts = 0;
         LeLe leLe = new LeLe();
         // 1.获取pickup所有url
-        appendLog("正在获取pick up的连接\n");
-        java.util.List<String> pickupUrls = leLe.getPickUpUrl();
+        appendLog("正在获取 http://retoys.net/pickup/ 下的所有作品连接\n");
+        java.util.List<String> pickupUrls = leLe.getAllPickupUrl();
         appendLog("已经获取" + pickupUrls.size() + "个连接\n");
 
         // 2. 获取每个pickup里面所有图片url
         String path = "";
         for (String pickupUrl : pickupUrls) {
-            appendLog("开始获取 "+pickupUrl+" 所有图片下载地址\n");
+            appendLog("\n开始获取 "+pickupUrl+" 所有图片下载地址\n");
             List<String> picturl = leLe.getPictureUrls(pickupUrl);
             if (picturl.size() == 0){
                 errCounts++;
@@ -254,7 +254,7 @@ public class Main {
                 }
             }
         }
-        appendLog("下载完成, 失败数" + errCounts + "个\n");
+        appendError("\n下载完成, 失败数" + errCounts + "个\n");
 
 
         btn_start.setText("开始");
@@ -265,11 +265,13 @@ public class Main {
     private static void appendLog(String log){
         if (txt_log != null) {
             txt_log.append(log);
+            txt_log.setSelectionStart(txt_log.getText().length());
         }
     }
     private static void appendError(String error){
         if (txt_log != null) {
             txt_log.append(error);
+            txt_log.setSelectionStart(txt_log.getText().length());
         }
     }
 
