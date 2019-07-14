@@ -20,6 +20,7 @@ public class LeLe {
     /**
      * 获取"http://retoys.net/主页面的pickup4个连接
      * 已经弃用
+     *
      * @return
      */
     public List<String> getPickUpUrl() {
@@ -51,8 +52,13 @@ public class LeLe {
         return list;
     }
 
-    public List<String> getAllPickupUrl(){
-        String url = "http://retoys.net/pickup/";
+    /**
+     * 获取pickup每页下面的作品
+     *
+     * @param url http://retoys.net/pickup/page/2/
+     * @return 每个作品的url
+     */
+    public List<String> getAllPickupUrl(String url) {
         List<String> list = new ArrayList<>();
 
         try {
@@ -63,7 +69,7 @@ public class LeLe {
 
                     // 获取第一个row下的所有子项
                     Elements rowClass = doc.getElementsByClass("row").first().children();
-                    for (Element row : rowClass){
+                    for (Element row : rowClass) {
                         list.add(row.getElementsByTag("a").attr("href"));
                     }
                 }
@@ -83,7 +89,8 @@ public class LeLe {
     }
 
     /**
-     *  获取pickup作品下的图片链接
+     * 获取pickup作品下的图片链接
+     *
      * @param url
      * @return
      */
@@ -104,15 +111,17 @@ public class LeLe {
                         Elements tabImgs = classImg.getElementsByTag("img");
                         for (Element tabImg : tabImgs) {
                             String string = tabImg.attr("data-src").trim();
-                            if (!"".equals(string)){
+                            if (!"".equals(string)) {
                                 list.add(string);
                             }
 
                         }
                     }
                 }
+
                 @Override
-                public void onFail(int retCode) {}
+                public void onFail(int retCode) {
+                }
             });
 
         } catch (IOException e) {
@@ -121,12 +130,12 @@ public class LeLe {
         return list;
     }
 
-    public String formatString(String str){
+    public String formatString(String str) {
         String ret = str.replace("/", "-");
         return ret.replace("\\", "-");
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
     }
 
 }

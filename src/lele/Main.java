@@ -1,31 +1,41 @@
 package lele;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static javax.swing.SpringLayout.*;
 
 public class Main {
 
-    private static String root = "."; // 文件输出路径
     private static String config_path = "config.ini"; // 配置文件路径
+    // 配置文件读出来的参数
+    private static String root = ""; // 文件输出路径
+    private static int startPage = 1;   //
+    private static int pageCount = 1;
 
     private static JFrame mainFrame;
     private static JButton btn_start;
+    private static JButton btn_stop;
+    private static JTextField txt_startpage;
+    private static JTextField txt_pageCount;
     private static JButton btn_choice;
     private static JTextField txt_path;
     private static JTextArea txt_log;
+
+    private static boolean isForcedExit = false;
 
     public static void main(String[] args) {
         // 创建 JFrame 实例
         mainFrame = new JFrame("Java");
         // Setting the width and height of frame
-        mainFrame.setSize(400, 500);
+        mainFrame.setSize(500, 400);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);//在屏幕中居中显示
 
@@ -48,23 +58,72 @@ public class Main {
 
     }
 
+    /**
+     * 初始化控件里面的参数
+     */
     private static void laodConfig() {
-
-        // 读取上次使用的路径
-        if (Utils.fileIsExists(config_path)){
-            String readPath = Utils.readFileLine(1, new File(config_path).getAbsolutePath());
-            if (!"".equals(readPath)){
-                root = readPath;
-            }
-        }
-
+        readConfigFile();
 
         // 初始化文本框的内容
-        if (txt_path != null){
+        if (txt_path != null) {
             File file = new File(root);
             txt_path.setText(file.getAbsolutePath());
             root = file.getAbsolutePath();
         }
+
+        // 开始页数
+        if (txt_startpage != null) {
+            txt_startpage.setText(Utils.intToString(startPage));
+        }
+
+        // 爬取页数
+        if (txt_pageCount != null) {
+            txt_pageCount.setText(Utils.intToString(pageCount));
+        }
+    }
+
+    /**
+     * 从配置文件读取参数保存到变量
+     */
+    private static void readConfigFile() {
+        File file = new File(config_path);
+        if (!Utils.fileIsExists(config_path)) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 保存配置文件的绝对路径
+        config_path = file.getAbsolutePath();
+        String str;
+        // 路径
+        str = Utils.readFileLine(1, config_path);
+        if ("".equals(str)) {
+            root = new File("").getAbsolutePath();
+        }else{
+            root = str;
+        }
+        // 开始页数
+        str = Utils.readFileLine(2, config_path);
+        if (!"".equals(str)) {
+            startPage = Utils.stringToInt(str);
+        }
+
+        // 爬取页数
+        str = Utils.readFileLine(3, config_path);
+        if (!"".equals(str)) {
+            pageCount = Utils.stringToInt(str);
+        }
+    }
+
+    /**
+     * 保存参数到配置文件
+     */
+    private static void saveConfigFile() {
+        String string = root + "\r\n" + startPage + "\r\n" + pageCount;
+        Utils.writeFile(string, false, config_path);
     }
 
     /**
@@ -93,17 +152,82 @@ public class Main {
         });
         panel.add(btn_start);
 
+        // 停止按钮
+
+        btn_stop = new JButton("停止");
+        btn_stop.setEnabled(false);
+        btn_stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btn_stop.setEnabled(false);
+                btn_stop.setText("正在停止中");
+                isForcedExit = true;
+            }
+        });
+        panel.add(btn_stop);
+
         // 清空消息按钮
         JButton btn_clean = new JButton("清空消息");
         btn_clean.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (txt_log != null){
+                if (txt_log != null) {
                     txt_log.setText("");
                 }
             }
         });
         panel.add(btn_clean);
+
+        // 开始页数标签
+        JLabel lab_startPage = new JLabel("开始页数");
+        panel.add(lab_startPage);
+
+        // 开始页数文本框
+        txt_startpage = new JTextField(3);
+        txt_startpage.setEnabled(true);
+        txt_startpage.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+//                Log("insertUpdate");
+                startPage = Utils.stringToInt(txt_startpage.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+//                Log("removeUpdate");
+                startPage = Utils.stringToInt(txt_startpage.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+//                Log("changedUpdate");
+            }
+        });
+        panel.add(txt_startpage);
+
+        // 爬取页数标签
+        JLabel lab_pageCount = new JLabel("获取多少页");
+        panel.add(lab_pageCount);
+
+        // 爬取页数文本框
+        txt_pageCount = new JTextField(3);
+        txt_pageCount.setEnabled(true);
+        txt_pageCount.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                pageCount = Utils.stringToInt(txt_pageCount.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                pageCount = Utils.stringToInt(txt_pageCount.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+        panel.add(txt_pageCount);
 
         // 选择目录按钮
         btn_choice = new JButton("选择保存目录");
@@ -119,13 +243,12 @@ public class Main {
                 fc.setMultiSelectionEnabled(false);
 
                 int result = fc.showOpenDialog(mainFrame);
-                if (result == JFileChooser.APPROVE_OPTION){
+                if (result == JFileChooser.APPROVE_OPTION) {
                     // 点击了确定
                     File file = fc.getSelectedFile();
-                    if (txt_path != null){
-                        Utils.wiriteFile(file.getAbsolutePath(), config_path);
-                        txt_path.setText(file.getAbsolutePath());
+                    if (txt_path != null) {
                         root = file.getAbsolutePath();
+                        txt_path.setText(root);
                     }
                 }
             }
@@ -150,22 +273,52 @@ public class Main {
         // 组件约束关系 /////////////////////////////////////////////////////////////////////////////
 
         // 开始按钮
-        // 设置标签的左上角坐标为 (5, 5)
+        // 设置左上角坐标为 (5, 5)
         SpringLayout.Constraints cons_start = layout.getConstraints(btn_start);
         cons_start.setX(Spring.constant(5));
         cons_start.setY(Spring.constant(5));
 
+        // 停止按钮
+        // 设置左上角坐 水平坐标为 开始按钮的北坐标, 垂直坐标为 开始按钮的东边坐标+5
+        SpringLayout.Constraints cons_stop = layout.getConstraints(btn_stop);
+        cons_stop.setX(Spring.sum(cons_start.getConstraint(EAST), Spring.constant(5)));
+        cons_stop.setY(cons_start.getConstraint(NORTH));
+
         // 清除按钮
-        // 设置左上角 水平坐标为5, 垂直坐标为 开始按钮的东边坐标+5
+        // 设置左上角 水平坐标为5, 垂直坐标为 停止按钮的东边坐标+5
         SpringLayout.Constraints cons_clean = layout.getConstraints(btn_clean);
-        cons_clean.setX(Spring.sum(cons_start.getConstraint(EAST), Spring.constant(5)));
-        cons_clean.setY(Spring.constant(5));
+        cons_clean.setX(Spring.sum(cons_stop.getConstraint(EAST), Spring.constant(5)));
+        cons_clean.setY(cons_start.getConstraint(NORTH));
+
+        // 开始页数标签
+        // 设置左上角 水平坐标为5, 垂直坐标为 清除按钮的东边坐标+5
+        SpringLayout.Constraints cons_lab_startPage = layout.getConstraints(lab_startPage);
+        cons_lab_startPage.setX(Spring.sum(cons_clean.getConstraint(EAST), Spring.constant(5)));
+        cons_lab_startPage.setY(Spring.constant(5));
+
+        // 开始页数文本框
+        // 设置左上角 水平坐标为5, 垂直坐标为 开始页数标签的东边坐标+5
+        SpringLayout.Constraints cons_txt_startPage = layout.getConstraints(txt_startpage);
+        cons_txt_startPage.setX(cons_lab_startPage.getConstraint(EAST));
+        cons_txt_startPage.setY(Spring.constant(5));
+
+        // 爬取页数标签
+        // 设置左上角 水平坐标为5, 垂直坐标为 开始页数文本框的东边坐标+5
+        SpringLayout.Constraints cons_lab_pageCount = layout.getConstraints(lab_pageCount);
+        cons_lab_pageCount.setX(Spring.sum(cons_txt_startPage.getConstraint(EAST), Spring.constant(5)));
+        cons_lab_pageCount.setY(Spring.constant(5));
+
+        // 爬取页数文本框
+        // 设置左上角 水平坐标为5, 垂直坐标为 爬取页数标签的东边坐标+5
+        SpringLayout.Constraints cons_txt_pageCount = layout.getConstraints(txt_pageCount);
+        cons_txt_pageCount.setX(cons_lab_pageCount.getConstraint(EAST));
+        cons_txt_pageCount.setY(Spring.constant(5));
 
         // 选择目录按钮
         // 设置左上角 水平坐标为5  垂直坐标为 开始按钮的南坐标+5
         SpringLayout.Constraints cons_choice = layout.getConstraints(btn_choice);
         cons_choice.setX(Spring.constant(5));
-        cons_choice.setY(Spring.sum(cons_start.getConstraint(SOUTH),Spring.constant(5)));
+        cons_choice.setY(Spring.sum(cons_start.getConstraint(SOUTH), Spring.constant(5)));
 
         // 显示目录的文本框
         // 设置左上角 水平坐标为 选择目录按钮的东坐标+5 垂直坐标为 选择目录按钮的北坐标(居中)
@@ -206,69 +359,109 @@ public class Main {
      * 开始执行爬虫，线程下调用
      */
     private static void start() {
+        // 判断参数是否正确
+        if (startPage <= 0 || pageCount <= 0) {
+            appendError("页数填写不正确\n");
+            return;
+        }
+        if ("".equals(root)){
+            appendError("保存目录不能为空\n");
+            return;
+        }
+
+        saveConfigFile();
+
+        isForcedExit = false; // 每个循环后面都要判断是否强制退出
         btn_start.setEnabled(false);
         btn_start.setText("获取中...");
+        btn_stop.setEnabled(true);
         btn_choice.setEnabled(false);
+        txt_startpage.setEnabled(false);
+        txt_pageCount.setEnabled(false);
 
         int errCounts = 0;
+        int succsCount = 0;
         LeLe leLe = new LeLe();
-        // 1.获取pickup所有url
-        appendLog("正在获取 http://retoys.net/pickup/ 下的所有作品连接\n");
-        java.util.List<String> pickupUrls = leLe.getAllPickupUrl();
-        appendLog("已经获取" + pickupUrls.size() + "个连接\n");
 
-        // 2. 获取每个pickup里面所有图片url
-        String path = "";
-        for (String pickupUrl : pickupUrls) {
-            appendLog("\n开始获取 "+pickupUrl+" 所有图片下载地址\n");
-            List<String> picturl = leLe.getPictureUrls(pickupUrl);
-            if (picturl.size() == 0){
-                errCounts++;
-                appendError("获取 "+pickupUrl+" 所有图片地址失败\n");
-                continue;
-            }
-            for (int i = 0; i < picturl.size(); i++) {
-                if (i == 0) {
-                    path = root + "\\" + leLe.formatString(picturl.get(i));
-                    if (!Utils.createDir(path)) {
-                        appendError("创建路径失败:" + path +"\n");
-                        errCounts++;
-                        break;
-                    }
-                    appendLog("获取到" + (picturl.size() - 1) + "个图片\n");
-                } else {
-                    if (!"".equals(path)) {
-                        if (!Utils.fileIsExists(path + "\\" + Utils.urlToFileNeme(picturl.get(i)))) {
-                            if (FileDownload.download(picturl.get(i), path + "\\" + Utils.urlToFileNeme(picturl.get(i)))) {
-                                appendLog("下载成功：" + path + "\\" + Utils.urlToFileNeme(picturl.get(i))+ "\n");
-                            }else{
-                                appendError("下载失败：" + path + "\\" + Utils.urlToFileNeme(picturl.get(i))+ "\n");
-                                errCounts++;
-                                // 删除下载失败的文件
-                                Utils.deleteFile(path + "\\" + Utils.urlToFileNeme(picturl.get(i)));
+        String pageRootUrl = "http://retoys.net/pickup/page/";
+        for (int index = startPage; index < startPage + pageCount; index++) {
+            String pageUrl = pageRootUrl + index + "/";
+            // 1.获取pickup所有url
+            appendLog("\n正在获取第" + index + "页下的所有作品连接\n\n");
+            java.util.List<String> pickupUrls = leLe.getAllPickupUrl(pageUrl);
+            appendLog("已经获取" + pickupUrls.size() + "个作品的链接\n");
+
+            // 2. 获取每个pickup里面所有图片url
+            String path = "";
+            for (String pickupUrl : pickupUrls) {
+                appendLog("\n开始获取第"+ index+ "页 " + pickupUrl + " 所有图片下载地址\n");
+                List<String> picturl = leLe.getPictureUrls(pickupUrl);
+                if (picturl.size() == 0) {
+                    errCounts++;
+                    appendError("获取 " + pickupUrl + " 所有图片地址失败\n");
+                    continue;
+                }
+                for (int i = 0; i < picturl.size(); i++) {
+                    if (i == 0) {
+                        path = root + "\\" + leLe.formatString(picturl.get(i));
+                        if (!Utils.createDir(path)) {
+                            appendError("创建路径失败:" + path + "\n");
+                            errCounts++;
+                            break;
+                        }
+                        appendLog("获取到" + (picturl.size() - 1) + "个图片\n");
+                    } else {
+                        if (!"".equals(path)) {
+                            if (!Utils.fileIsExists(path + "\\" + Utils.urlToFileNeme(picturl.get(i)))) {
+                                if (FileDownload.download(picturl.get(i), path + "\\" + Utils.urlToFileNeme(picturl.get(i)))) {
+                                    appendLog("下载成功：" + path + "\\" + Utils.urlToFileNeme(picturl.get(i)) + "\n");
+                                    succsCount++;
+                                } else {
+                                    appendError("下载失败：" + path + "\\" + Utils.urlToFileNeme(picturl.get(i)) + "\n");
+                                    errCounts++;
+                                    // 删除下载失败的文件
+                                    Utils.deleteFile(path + "\\" + Utils.urlToFileNeme(picturl.get(i)));
+                                }
+                            } else {
+                                appendLog("文件已经存在: " + path + "\\" + Utils.urlToFileNeme(picturl.get(i)) + "\n");
                             }
-                        } else {
-                            appendLog("文件已经存在: " + path + "\\" + Utils.urlToFileNeme(picturl.get(i))+ "\n");
                         }
                     }
+                    if (isForcedExit){
+                        break;
+                    }
+                }
+                if (isForcedExit){
+                    break;
                 }
             }
+            if (isForcedExit){
+                break;
+            }
         }
-        appendError("\n下载完成, 失败数" + errCounts + "个\n");
+        appendError("\n  完成, 下载" + succsCount +"个, 失败" + errCounts + "个\n");
 
 
+        if (isForcedExit){
+            btn_stop.setText("停止");
+            isForcedExit = false;
+        }
+        btn_stop.setEnabled(false);
         btn_start.setText("开始");
         btn_start.setEnabled(true);
         btn_choice.setEnabled(true);
+        txt_startpage.setEnabled(true);
+        txt_pageCount.setEnabled(true);
     }
 
-    private static void appendLog(String log){
+    private static void appendLog(String log) {
         if (txt_log != null) {
             txt_log.append(log);
             txt_log.setSelectionStart(txt_log.getText().length());
         }
     }
-    private static void appendError(String error){
+
+    private static void appendError(String error) {
         if (txt_log != null) {
             txt_log.append(error);
             txt_log.setSelectionStart(txt_log.getText().length());

@@ -15,18 +15,20 @@ import java.io.InputStreamReader;
 
 public class HttpGetConnect {
 
-    interface ICallBack{
+    interface ICallBack {
         void onSuccess(String html);
+
         void onFail(int retCode);
     }
 
     /**
-     *  获取html内容
+     * 获取html内容
+     *
      * @param url
-     * @param charsetName  UTF-8、GB2312
+     * @param charsetName UTF-8、GB2312
      * @throws IOException
      */
-    public static void connect(String url,String charsetName, ICallBack iCallBack) throws IOException{
+    public static void connect(String url, String charsetName, ICallBack iCallBack) throws IOException {
         BasicHttpClientConnectionManager connManager = new BasicHttpClientConnectionManager();
 
         CloseableHttpClient httpclient = HttpClients.custom()
@@ -35,7 +37,7 @@ public class HttpGetConnect {
         String content = "";
         int timeout = 10000;
 
-        try{
+        try {
             HttpGet httpget = new HttpGet(url);
 
             RequestConfig requestConfig = RequestConfig.custom()
@@ -60,26 +62,26 @@ public class HttpGetConnect {
 
                 HttpEntity entity = response.getEntity();
                 InputStream instream = entity.getContent();
-                BufferedReader br = new BufferedReader(new InputStreamReader(instream,charsetName));
+                BufferedReader br = new BufferedReader(new InputStreamReader(instream, charsetName));
                 StringBuffer sbf = new StringBuffer();
                 String line = null;
-                while ((line = br.readLine()) != null){
+                while ((line = br.readLine()) != null) {
                     sbf.append(line + "\n");
                 }
 
                 br.close();
-                if (iCallBack != null){
+                if (iCallBack != null) {
                     iCallBack.onSuccess(sbf.toString());
                 }
             } else {
-                if (iCallBack != null){
+                if (iCallBack != null) {
                     iCallBack.onFail(status);
                 }
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             httpclient.close();
         }
     }
