@@ -91,7 +91,7 @@ public class Utils {
 
 
             while ((retStr = bf.readLine()) != null) {
-                if (index+1 == num) {
+                if (index + 1 == num) {
                     break;
                 }
                 index++;
@@ -155,5 +155,44 @@ public class Utils {
 
     public static String intToString(int i) {
         return String.valueOf(i);
+    }
+
+    /**
+     * 判断文件名是否包含特殊字符串
+     *
+     * @param fileName 文件名
+     * @return true 合法 false 含有特殊符号
+     */
+    public static boolean isFileName(String fileName) {
+        return fileName.matches("[^\\\\/:\\*\\?\\\"<>\\|](\\x20|[^\\\\/:\\*\\?\\\"<>\\|])*[^\\\\/:\\*\\?\\\"<>\\|\\.]$");
+    }
+
+    /**
+     * 过滤文件名的特殊符号
+     * @param fileName 文件名
+     * @param replaStr 替换的字符
+     * @return 过滤后的文件名
+     */
+    public static String filterFileName(String fileName, String replaStr) {
+        Pattern pattern = Pattern.compile("[\\\\/:\\*\\?\\\"<>\\|]");
+        Matcher matcher = pattern.matcher(fileName);
+        return matcher.replaceAll(replaStr); // 替换匹配到的非法字符
+    }
+
+    /**
+     * 过滤文件名的特殊符号
+     * @param fileName 文件名
+     * @return 过滤后的文件名
+     */
+    public static String filterFileName(String fileName){
+        return filterFileName(fileName, "");
+    }
+
+    public static void log(Object o) {
+        System.out.println(o);
+    }
+
+    public static void main(String[] args) {
+        Utils.log(Utils.filterFileName("asdfas fsfsdfaf"));
     }
 }

@@ -104,7 +104,7 @@ public class LeLe {
                     Document doc = Jsoup.parse(html);
                     // 获取标题
                     // 标题会带有/的字符，用-代替
-                    list.add(formatString(doc.getElementsByClass("entry__title").first().text()));
+                    list.add(Utils.filterFileName(doc.getElementsByClass("entry__title").first().text(), "").trim());
                     // 获取图片url
                     Elements classImgs = doc.getElementsByClass("img");
                     for (Element classImg : classImgs) {
@@ -128,11 +128,6 @@ public class LeLe {
             e.printStackTrace();
         }
         return list;
-    }
-
-    public String formatString(String str) {
-        String ret = str.replace("/", "-");
-        return ret.replace("\\", "-");
     }
 
     public static void main(String[] args) {

@@ -403,7 +403,7 @@ public class Main {
                 }
                 for (int i = 0; i < picturl.size(); i++) {
                     if (i == 0) {
-                        path = root + "\\" + leLe.formatString(picturl.get(i));
+                        path = root + "\\" + picturl.get(i);
                         if (!Utils.createDir(path)) {
                             appendError("创建路径失败:" + path + "\n");
                             errCounts++;
